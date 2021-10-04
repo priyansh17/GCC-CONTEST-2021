@@ -23,21 +23,19 @@
 
 using namespace std;
 int totalPairs(int n, vector<int>& values) {
+    if(n==2) return 1;
     int answer=0;
-    for(int i=0;i<n;i++){
-        int maxm=INT_MIN;
-        for(int j=i+1;j<n;j++){
-            int val=min(values[i],values[j]);
-            if(maxm<val){
-                maxm=max(maxm,values[j]);
+    for(int i=0;i<n-1;i++){
+        int maxm=values[i+1];
+        answer++;
+        for(int j=i+2;j<n;j++){
+            if(maxm>=values[i]) break;
+            if(maxm<values[j]){
                 answer++;
-            }
-            else if(maxm>=val && values[i]==val){
-                break;
+                maxm=values[j];
             }
         }
     }
-    
     return answer;
 }
 
