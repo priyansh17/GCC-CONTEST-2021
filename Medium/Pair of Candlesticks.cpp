@@ -20,16 +20,16 @@
 #include <iostream>
 #include <algorithm>
 #include <unordered_map>
-
 using namespace std;
-int totalPairs(int n, vector<int>& values) {
+
+long totalPairs(int n, vector<long>& values) {
     if(n==2) return 1;
-    int answer=0;
-    for(int i=0;i<n-1;i++){
-        int maxm=values[i+1];
+    long answer=0;
+    for(long i=0;i<n-1;i++){
+        long maxm=values[i+1];
         answer++;
-        for(int j=i+2;j<n;j++){
-            if(maxm>=values[i]) break;
+        for(long j=i+2;j<n;j++){
+            if(maxm>values[i]) break;
             if(maxm<values[j]){
                 answer++;
                 maxm=values[j];
@@ -42,11 +42,11 @@ int totalPairs(int n, vector<int>& values) {
 int main(){
    int n;
    cin >> n;
-   vector<int> values(n);
+   vector<long> values(n);
    for (int i = 0; i < n; ++i) {
         cin >> values[i];
    }
-	int answer = totalPairs(n, values);
+	long answer = totalPairs(n, values);
     // Do not remove below line
     cout << answer << endl;
     // Do not print anything after this line
