@@ -3,7 +3,6 @@ using namespace std;
 #include <iostream>
 #include <bits/stdc++.h>
 
-
 string solution(string n){
     map<long,long> m;
     m[0]++;
@@ -15,9 +14,10 @@ string solution(string n){
             m[local]++;
         }
     }
-    auto it=m.rbegin();
+    auto it=m.rbegin(),it2=++m.rbegin();
     if(it->second!=1)    return "B";
-    else if((it->first)&1) return "A";
+    else if(!((it->first)&1)) return "B";
+    else if(((it->first+1)>>1)>(it2->first)) return "A";
     else return "B";
 }
 
