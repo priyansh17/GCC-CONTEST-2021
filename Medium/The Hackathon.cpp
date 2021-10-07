@@ -20,7 +20,7 @@ class group{
         }
 };
 
-group FormNewGroup(string e1,string e2,map<string,int> d){
+group FormNewGroup(string e1,string e2,map<string,int> &d){
     group newGroup(GroupCounter++);
     newGroup.members.insert(e1);
     newGroup.members.insert(e2);
@@ -30,7 +30,22 @@ group FormNewGroup(string e1,string e2,map<string,int> d){
     return newGroup;
 }
 
-void printResult(vector<group> groups){
+int FindGroup(int Id,vector<group> &groups){
+    for(int g=0;g<groups.size();g++)
+        if(groups[g].groupId==Id)
+            return g;
+}
+
+void AddMember(group &G,string e,map<string,int> &employees,map<string,int> &departments){
+    if(G.size<maxM && G.dept[departments[e]-1]>0){
+        G.size++;
+        G.dept[departments[e]-1]--;
+        G.members.insert(e);
+        employees[e]=G.groupId;
+    }
+}
+
+void printResult(vector<group> &groups){
     if(groups.size()==0){
         cout<<"no groups"<<endl;
         return;
@@ -47,6 +62,7 @@ void printResult(vector<group> groups){
 
 void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
     F=f;S=s;T=t;
+    maxM=b;minM=a;
     map<string,int> employees;
     map<string,int> departments;
     for(int i=0;i<n;i++){
@@ -61,15 +77,16 @@ void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
         cin>>e1>>e2;
         if(employees[e1]==-1 && employees[e2]==-1){
             group newGroup=FormNewGroup(e1,e2,departments);
-            GroupCounter++;
             groups.push_back(newGroup);
             employees[e1]=employees[e2]=newGroup.groupId;
         }
         else if(employees[e1]==-1){
-            //AddMember(employees[e2],e1);
+            group &G=groups[FindGroup(employees[e2],groups)];
+            AddMember(G,e1,employees,departments);
         }
         else if(employees[e2]==-1){
-            //AddMember(employees[e1],e2);
+            group &G=groups[FindGroup(employees[e2],groups)];
+            AddMember(G,e2,employees,departments);
         }else if(employees[e1]!=employees[e2]){
            // MergeGroups(employees[e1],employees[e2]);
         }
