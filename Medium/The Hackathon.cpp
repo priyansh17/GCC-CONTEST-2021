@@ -44,16 +44,18 @@ void AddMember(group &G,string e,map<string,int> &employees,map<string,int> &dep
     }
 }
 
-void MergeGroups(group &G1,group &G2,map<string,int> &employees,map<string,int> &departments){
+bool MergeGroups(group &G1,group &G2,map<string,int> &employees,map<string,int> &departments){
     vector<int> maxArr={F,S,T};
-    if(G1.size + G2.size > maxM) return;
+    if(G1.size + G2.size > maxM) return false;
     for(int i=0;i<3;i++)
-        if(G1.dept[i]+G2.dept[i]>maxArr[i]) break;
-    
-    
-    
-    
-    
+        if(G1.dept[i]+G2.dept[i]<maxArr[i]) return false;
+    for(auto i:G2.members){
+        G1.dept[departments[i]-1]--;
+        employees[i]=G1.groupId;
+        G1.members.insert(i);
+    }
+    G1.size+=G2.size;
+    return true;
 }
 
 void printResult(vector<group> &groups){
@@ -103,9 +105,12 @@ void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
             group &G=groups[FindGroup(employees[e2],groups)];
             AddMember(G,e2,employees,departments);
         }else if(employees[e1]!=employees[e2]){
-            group &G1=groups[FindGroup(employees[e2],groups)];
-            group &G2=groups[FindGroup(employees[e2],groups)];
-            MergeGroups(G1,G2,employees,departments);
+            int index1=FindGroup(employees[e2],groups);
+            int index2=FindGroup(employees[e2],groups);
+            group &G1=groups[index1];
+            group &G2=groups[index2];
+            if(G1.size>G2.size) if(MergeGroups(G1,G2,employees,departments)) groups.erase(groups.begin()+index2);
+            else if(MergeGroups(G2,G1,employees,departments)) groups.erase(groups.begin()+index1);
         }
     }
     printResult(groups);   
