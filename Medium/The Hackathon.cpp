@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
 vector<string> split_string(string);
@@ -45,6 +44,18 @@ void AddMember(group &G,string e,map<string,int> &employees,map<string,int> &dep
     }
 }
 
+void MergeGroups(group &G1,group &G2,map<string,int> &employees,map<string,int> &departments){
+    vector<int> maxArr={F,S,T};
+    if(G1.size + G2.size > maxM) return;
+    for(int i=0;i<3;i++)
+        if(G1.dept[i]+G2.dept[i]>maxArr[i]) break;
+    
+    
+    
+    
+    
+}
+
 void printResult(vector<group> &groups){
     if(groups.size()==0){
         cout<<"no groups"<<endl;
@@ -55,6 +66,10 @@ void printResult(vector<group> &groups){
     for(group g:groups){
         maxSize=max(maxSize,g.size);
         if(g.size==maxSize) Largest=g;
+    }
+    if(groups.size()<minM){
+        cout<<"no groups"<<endl;
+        return;
     }
     for(auto name:Largest.members)
         cout<<name<<endl;
@@ -88,7 +103,9 @@ void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
             group &G=groups[FindGroup(employees[e2],groups)];
             AddMember(G,e2,employees,departments);
         }else if(employees[e1]!=employees[e2]){
-           // MergeGroups(employees[e1],employees[e2]);
+            group &G1=groups[FindGroup(employees[e2],groups)];
+            group &G2=groups[FindGroup(employees[e2],groups)];
+            MergeGroups(G1,G2,employees,departments);
         }
     }
     printResult(groups);   
