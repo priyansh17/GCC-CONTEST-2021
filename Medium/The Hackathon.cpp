@@ -69,13 +69,14 @@ void printResult(vector<group> &groups){
         maxSize=max(maxSize,g.size);
         if(g.size==maxSize) Largest=g;
     }
-    if(groups.size()<minM){
+    if(Largest.size<minM){
         cout<<"no groups"<<endl;
         return;
     }
     for(auto name:Largest.members)
         cout<<name<<endl;
 }
+
 
 void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
     F=f;S=s;T=t;
@@ -93,27 +94,36 @@ void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
         string e1,e2;
         cin>>e1>>e2;
         if(employees[e1]==-1 && employees[e2]==-1){
+            //cout<<"Request new group: "<<e1<<" "<<e2<<endl;
             group newGroup=FormNewGroup(e1,e2,departments);
             groups.push_back(newGroup);
             employees[e1]=employees[e2]=newGroup.groupId;
         }
         else if(employees[e1]==-1){
+            //cout<<"Request add member: "<<e1<<" "<<e2<<endl;
             group &G=groups[FindGroup(employees[e2],groups)];
             AddMember(G,e1,employees,departments);
         }
         else if(employees[e2]==-1){
+            //cout<<"Request add member: "<<e1<<" "<<e2<<endl;
             group &G=groups[FindGroup(employees[e2],groups)];
             AddMember(G,e2,employees,departments);
         }else if(employees[e1]!=employees[e2]){
-            int index1=FindGroup(employees[e2],groups);
+            //cout<<"Request merge groups: "<<e1<<" "<<e2<<endl;
+            int index1=FindGroup(employees[e1],groups);
             int index2=FindGroup(employees[e2],groups);
             group &G1=groups[index1];
             group &G2=groups[index2];
-            if(G1.size>G2.size) if(MergeGroups(G1,G2,employees,departments)) groups.erase(groups.begin()+index2);
-            else if(MergeGroups(G2,G1,employees,departments)) groups.erase(groups.begin()+index1);
+            if(G1.size>G2.size){
+                if(MergeGroups(G1,G2,employees,departments)) 
+                    groups.erase(groups.begin()+index2);
+            }else{ 
+                if(MergeGroups(G2,G1,employees,departments)) 
+                    groups.erase(groups.begin()+index1);
+            }
         }
     }
-    printResult(groups);   
+    printResult(groups);
 }
 
 int main()
