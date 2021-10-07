@@ -64,19 +64,27 @@ void printResult(vector<group> &groups){
         return;
     }
     int maxSize=INT_MIN;
-    group Largest;
-    for(group g:groups){
-        maxSize=max(maxSize,g.size);
-        if(g.size==maxSize) Largest=g;
+    set<string> names;
+    for(int i=0;i<groups.size();i++)
+        maxSize=max(maxSize,groups[i].size);
+     if(maxSize<minM){
+         cout<<"no groups"<<endl;
+         return;
     }
-    if(Largest.size<minM){
-        cout<<"no groups"<<endl;
-        return;
-    }
-    for(auto name:Largest.members)
+    for(auto g:groups)
+         if(g.size==maxSize)
+             for(auto i:g.members)
+                names.insert(i);
+    for(auto name:names)
         cout<<name<<endl;
 }
 
+// void printallgroups(vector<group> &groups){
+//     for(auto i:groups){
+//         for(auto j:i.members)
+//             cout<<j<<" ";
+//         cout<<endl;}
+// }
 
 void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
     F=f;S=s;T=t;
@@ -106,7 +114,7 @@ void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
         }
         else if(employees[e2]==-1){
             //cout<<"Request add member: "<<e1<<" "<<e2<<endl;
-            group &G=groups[FindGroup(employees[e2],groups)];
+            group &G=groups[FindGroup(employees[e1],groups)];
             AddMember(G,e2,employees,departments);
         }else if(employees[e1]!=employees[e2]){
             //cout<<"Request merge groups: "<<e1<<" "<<e2<<endl;
@@ -123,6 +131,7 @@ void theHackathon(int n, int m, int a, int b, int f, int s, int t) {
             }
         }
     }
+    //printallgroups(groups);
     printResult(groups);
 }
 
@@ -175,6 +184,7 @@ vector<string> split_string(string input_string) {
         i = pos + 1;
         pos = input_string.find(delimiter, i);
     }
+
     splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
 
     return splits;
