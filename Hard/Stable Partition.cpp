@@ -61,12 +61,12 @@ void countStablePartitions(int n, vector<int>& values) {
 }
 
 int main(){
-   int n;
-   cin >> n;
-   vector<int> values(n);
-   for (int i = 0; i < n; ++i) {
-        cin >> values[i];
-   }
+   int n=3;
+   //cin >> n;
+   vector<int> values={2,3,6};
+   //for (int i = 0; i < n; ++i) {
+       // cin >> values[i];
+   //}
    countStablePartitions(n, values);
    return 0;
 }
